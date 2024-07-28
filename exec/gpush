@@ -21,7 +21,7 @@ print("Args: ",sys.argv[3],sys.argv[1],sys.argv[2])
 
 os.system("rm -f ~/.cache/git/credential/socket")
 homedir = os.path.expanduser('~')
-file = open(homedir+"token","r") # Dont store token in homedir directly, make a subfolder somewhere and add that path here
+file = open(homedir + "/" + "token","r") # Dont store token in homedir directly, make a subfolder somewhere and add that path here
 passw = file.read()
 file.close()
 
