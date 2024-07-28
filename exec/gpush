@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+# Python function to run git push using token(or password) without using git
+# credential manager, works similar to autofilling username and password using expect(pyexpect)
+# Usage: gpush remote branch
+# gpush remote branch -u , to set default remote tracking to branch
+# Dont forget to edit the username and token file part below
+
+import pexpect
+import os
+import sys
+
+username = "FrosT2k5" # change this
+
+try:
+    sys.argv[3]
+except IndexError:
+    sys.argv.insert(3,"")
+
+print("Args: ",sys.argv[3],sys.argv[1],sys.argv[2])
+
+os.system("rm -f ~/.cache/git/credential/socket")
+homedir = os.path.expanduser('~')
+file = open(homedir+"token","r") # Dont store token in homedir directly, make a subfolder somewhere and add that path here
+passw = file.read()
+file.close()
+
+push = pexpect.spawn(f'git push {sys.argv[3]} {sys.argv[1]} {sys.argv[2]}')
+push.expect("Username for 'https://github.com': ")
+push.sendline(username)
+push.expect("Password")
+push.sendline(passw)
+push.interact()
+

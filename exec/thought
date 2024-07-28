@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Fetch a quite from quotable api and echo it to the terminal
+
+quotejson=`curl http://api.quotable.io/random?maxLength=70 2>/dev/null`
+quotetext=`echo $quotejson | jq .content`
+quoteauthor=`echo $quotejson | jq .author`
+quotetext=`echo $quotetext | sed 's/\"//g'`
+quoteauthor="~ "`echo $quoteauthor | sed 's/\"//g'`
+if [ "$quotetext" = "" ]; then
+    :
+else
+    echo $quotetext
+    echo $quoteauthor
+fi

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Edit the quote in motd on startup
+# Changes the quote on startup of termux
+# Should be added in bashrc using spawn process
+# Add three extra lines of whitespace in motd before running for
+# first time to prevent useful lines to be removed
+
+# Add this in bashrc last line to run this:
+# (~/bin/changequote &>/dev/null &)
+
+# Uses zenquotes api
+quotejson=`curl -L https://zenquotes.io/api/random 2>/dev/null`
+quotetext=`echo $quotejson | jq .[0].q`
+quoteauthor=`echo $quotejson | jq .[0].a`
+quotetext=`echo $quotetext | sed 's/\"//g'`
+quoteauthor="~ "`echo $quoteauthor | sed 's/\"//g'`
+if [ "$quotetext" = "" ]; then
+    :
+else
+    motdfile=$HOME/../usr/etc/motd
+    echo "$(head --lines=-3 $motdfile)" > $motdfile
+    echo -e "\n"$quotetext >> $motdfile
+    echo $quoteauthor >> $motdfile
+    echo "  " >> $motdfile
+fi
